@@ -974,6 +974,15 @@ if [ $MAIL != NO ]; then
         . auto/module
     fi
 
+    if [ $MAIL_XMPP = YES ]; then
+        ngx_module_name=ngx_mail_xmpp_module
+        ngx_module_deps=src/mail/ngx_mail_xmpp_module.h
+        ngx_module_srcs="src/mail/ngx_mail_xmpp_module.c \
+                         src/mail/ngx_mail_xmpp_handler.c"
+
+        . auto/module
+    fi
+
     ngx_module_name=ngx_mail_auth_http_module
     ngx_module_deps=
     ngx_module_srcs=src/mail/ngx_mail_auth_http_module.c
@@ -1315,6 +1324,18 @@ if [ $MAIL != NO ]; then
 
         . auto/module
     fi
+
+    if [ $MAIL_XMPP = YES ]; then
+        modules="$modules $MAIL_XMPP_MODULE"
+        MAIL_DEPS="$MAIL_DEPS $MAIL_XMPP_DEPS"
+        MAIL_SRCS="$MAIL_SRCS $MAIL_XMPP_SRCS"
+    fi
+
+    modules="$modules $MAIL_AUTH_HTTP_MODULE"
+    MAIL_SRCS="$MAIL_SRCS $MAIL_AUTH_HTTP_SRCS"
+
+    modules="$modules $MAIL_PROXY_MODULE"
+    MAIL_SRCS="$MAIL_SRCS $MAIL_PROXY_SRCS"
 
     NGX_ADDON_DEPS="$NGX_ADDON_DEPS \$(MAIL_DEPS)"
 fi
